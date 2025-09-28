@@ -1,5 +1,3 @@
-"use client";
-
 import AppBreadcrumb from "./AppBreadcrumb";
 import { Separator } from "./ui/separator";
 import { SidebarTrigger } from "./ui/sidebar";

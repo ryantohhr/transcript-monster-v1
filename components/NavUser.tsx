@@ -1,32 +1,29 @@
-"use server";
+"use client";
 
 import Image from "next/image";
+import { use } from "react";
 import { Avatar } from "@/components/ui/avatar";
-import { createClient } from "@/lib/supabase/server";
+import { UserContext } from "@/contexts/UserContext";
 
-export default async function NavUser() {
-  const supabase = await createClient();
+export default function NavUser() {
+  const user = use(UserContext);
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  if (!user) return null;
 
   return (
     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
       <Avatar className="h-8 w-8 rounded-lg grayscale">
         <Image
-          src={user?.user_metadata.avatar_url}
+          src={user.avatar_url}
           width={35}
           height={35}
-          alt={user?.user_metadata.full_name}
+          alt={user.name}
         />{" "}
       </Avatar>
       <div className="grid flex-1 text-left text-sm leading-tight">
-        <span className="truncate font-medium">
-          {user?.user_metadata.full_name}
-        </span>
+        <span className="truncate font-medium">{user.name}</span>
         <span className="text-muted-foreground truncate text-xs">
-          {user?.user_metadata.email}
+          {user.email}
         </span>
       </div>
     </div>
