@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ScrollText } from "lucide-react";
+import { ScrollText, TriangleAlert } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "./ui/button";
@@ -15,7 +15,12 @@ import {
 import { Input } from "./ui/input";
 
 const formSchema = z.object({
-  url: z.string().min(1, "Please enter a URL."),
+  url: z
+    .string("Please enter a URL!")
+    .regex(
+      /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(v\/|u\/\w\/|embed\/|watch\?v=|&v=|\?v=)([^#&?]*).*/,
+      "Invalid YouTube URL.\nPlease enter a URL like https://www.youtube.com/watch?v=... or https://youtu.be/...",
+    ),
 });
 
 export default function TranscribeForm() {
@@ -23,11 +28,13 @@ export default function TranscribeForm() {
     resolver: zodResolver(formSchema),
   });
 
+  function onSubmit(values: z.infer<typeof formSchema>) {}
+
   return (
     <Card className="w-2/5 mt-10">
       <CardContent>
         <Form {...form}>
-          <form className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
               name="url"
               control={form.control}
@@ -37,9 +44,22 @@ export default function TranscribeForm() {
                   <FormControl>
                     <Input placeholder="YouTube URL" />
                   </FormControl>
-                  <FormDescription className="text-xs text-red-700">
-                    eg. https://youtube.com/watch?v=...
+                  <FormDescription className="text-xs">
+                    Eg.{" "}
+                    <span className="text-red-700">
+                      https://youtube.com/watch?v=...
+                    </span>{" "}
+                    or{" "}
+                    <span className="text-red-700">
+                      https://youtube.com/watch?v=...
+                    </span>
                   </FormDescription>
+                  {form.formState.errors.url && (
+                    <div className="whitespace-pre-line text-sm flex gap-2 justify-start items-start border-1 border-red-800 bg-red-50 text-red-800 rounded-md p-4">
+                      <TriangleAlert size={25} />{" "}
+                      {form.formState.errors.url.message}
+                    </div>
+                  )}
                 </FormItem>
               )}
             />
