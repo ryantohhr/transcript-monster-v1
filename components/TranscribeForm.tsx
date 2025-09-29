@@ -39,7 +39,13 @@ export default function TranscribeForm() {
     });
     const data = await res.json();
 
-    return data;
+    await fetch("http://localhost:3000/api/transcribe/save", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ transcript: data.transcript }),
+    });
   }
 
   return (

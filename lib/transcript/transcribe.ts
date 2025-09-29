@@ -1,5 +1,6 @@
 import { fetchTranscript } from "youtube-transcript-plus";
 import type { TranscriptResponse } from "youtube-transcript-plus/dist/types";
+import { createClient } from "../supabase/server";
 import { extractVideoId } from "../utils";
 
 const CHUNK_SIZE = 3;
@@ -61,4 +62,44 @@ async function getTranscriptMetadata(videoId: string) {
     snippet.thumbnails.maxres.url,
     snippet.publishedAt,
   ];
+}
+
+export async function saveTranscript(transcript: ProcessedTranscript) {
+  const saveData = await saveTranscriptData(transcript);
+  const userData = await saveUserTranscriptRelation(transcript.videoId);
+
+  return [saveData, userData];
+}
+
+async function saveTranscriptData(transcript: ProcessedTranscript) {
+  const supabase = await createClient();
+  const { data } = await supabase.from("transcripts").insert([
+    {
+      video_id: transcript.videoId,
+      video_url: transcript.videoUrl,
+      video_title: transcript.videoTitle,
+      channel_name: transcript.channelName,
+      thumbnail_url: transcript.thumbnailUrl,
+      publish_date: transcript.publishDate,
+      text_chunks: transcript.textChunks,
+      timestamp_chunks: transcript.timestampChunks,
+    },
+  ]);
+
+  return data;
+}
+
+async function saveUserTranscriptRelation(videoId: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return null;
+
+  const res = await supabase
+    .from("user_transcripts")
+    .insert([{ user_id: user.id, video_id: videoId }]);
+
+  return res;
 }
