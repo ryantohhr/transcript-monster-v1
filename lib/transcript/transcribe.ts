@@ -59,6 +59,6 @@ async function getTranscriptMetadata(videoId: string) {
     snippet.title,
     snippet.channelTitle,
     snippet.thumbnails.maxres.url,
-    snippet.publsihedAt,
+    snippet.publishedAt,
   ];
 }
