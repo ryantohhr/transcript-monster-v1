@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollText, TriangleAlert } from "lucide-react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "./ui/button";
@@ -28,7 +29,18 @@ export default function TranscribeForm() {
     resolver: zodResolver(formSchema),
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await fetch("http://localhost:3000/api/transcribe/fetch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url: values.url }),
+    });
+    const data = await res.json();
+
+    return data;
+  }
 
   return (
     <Card className="w-2/5 mt-10">
