@@ -14,3 +14,12 @@ export function extractVideoId(url: string) {
     return match[2];
   }
 }
+
+export function formatDate(date: string) {
+  const dateObj = new Date(date);
+  return dateObj.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}

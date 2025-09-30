@@ -1,7 +1,7 @@
 import { fetchTranscript } from "youtube-transcript-plus";
 import type { TranscriptResponse } from "youtube-transcript-plus/dist/types";
 import { createClient } from "../supabase/server";
-import { extractVideoId } from "../utils";
+import { extractVideoId, formatDate } from "../utils";
 
 const CHUNK_SIZE = 3;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -60,7 +60,7 @@ async function getTranscriptMetadata(videoId: string) {
     snippet.title,
     snippet.channelTitle,
     snippet.thumbnails.maxres.url,
-    snippet.publishedAt,
+    formatDate(snippet.publishedAt),
   ];
 }
 
