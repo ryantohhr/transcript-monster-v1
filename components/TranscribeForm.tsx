@@ -1,8 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ScrollText, TriangleAlert } from "lucide-react";
-import { useEffect } from "react";
+import {
+  Captions,
+  LoaderCircle,
+  ScrollText,
+  TriangleAlert,
+} from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import TranscriptPreview from "./TranscriptPreview";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import {
@@ -24,28 +30,48 @@ const formSchema = z.object({
     ),
 });
 
-export default function TranscribeForm() {
+type TranscribeFormProps = {
+  transcript: ProcessedTranscript | null;
+  setTranscript: React.Dispatch<
+    React.SetStateAction<ProcessedTranscript | null>
+  >;
+};
+
+export default function TranscribeForm({
+  transcript,
+  setTranscript,
+}: TranscribeFormProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await fetch("http://localhost:3000/api/transcribe/fetch", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url: values.url }),
-    });
-    const data = await res.json();
+    setIsLoading(true);
 
-    await fetch("http://localhost:3000/api/transcribe/save", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ transcript: data.transcript }),
-    });
+    try {
+      const res = await fetch("http://localhost:3000/api/transcribe/fetch", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url: values.url }),
+      });
+      const data = await res.json();
+
+      await fetch("http://localhost:3000/api/transcribe/save", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ transcript: data.transcript }),
+      });
+
+      setTranscript(data.transcript);
+    } catch (err: any) {
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -69,8 +95,8 @@ export default function TranscribeForm() {
                     </span>{" "}
                     or{" "}
                     <span className="text-red-700">
-                      https://youtube.com/watch?v=...
-                    </span>
+                      https://youtu.be/...
+                    </span>{" "}
                   </FormDescription>
                   {form.formState.errors.url && (
                     <div className="whitespace-pre-line text-sm flex gap-2 justify-start items-start border-1 border-red-800 bg-red-50 text-red-800 rounded-md p-4">
@@ -81,10 +107,31 @@ export default function TranscribeForm() {
                 </FormItem>
               )}
             />
-            <Button className="w-full text-md py-5 bg-red-600 hover:bg-red-700 cursor-pointer">
-              <ScrollText />
-              Transcribe
-            </Button>
+            {transcript ? (
+              <>
+                <TranscriptPreview transcript={transcript} />
+                <Button className="w-full h-12 text-md py-5 bg-green-600 hover:bg-green-700 cursor-pointer">
+                  <Captions />
+                  Get Transcript
+                </Button>
+              </>
+            ) : (
+              <Button
+                disabled={isLoading}
+                className="w-full h-12 text-md py-5 bg-red-600 hover:bg-red-700 cursor-pointer"
+              >
+                {isLoading ? (
+                  <>
+                    <LoaderCircle className="animate-spin" /> Processing...
+                  </>
+                ) : (
+                  <>
+                    <ScrollText />
+                    Transcribe
+                  </>
+                )}
+              </Button>
+            )}
           </form>
         </Form>
       </CardContent>
