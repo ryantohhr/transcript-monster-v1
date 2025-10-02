@@ -36,11 +36,13 @@ type TranscribeFormProps = {
   setTranscript: React.Dispatch<
     React.SetStateAction<ProcessedTranscript | null>
   >;
+  setShowTranscript: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function TranscribeForm({
   transcript,
   setTranscript,
+  setShowTranscript,
 }: TranscribeFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
@@ -76,69 +78,74 @@ export default function TranscribeForm({
   }
 
   return (
-    <Card className="w-2/5 mt-10">
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              name="url"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem {...field}>
-                  <FormLabel>YouTube Video URL</FormLabel>
-                  <FormControl>
-                    <Input placeholder="YouTube URL" />
-                  </FormControl>
-                  <FormDescription className="text-xs">
-                    Eg.{" "}
-                    <span className="text-red-700">
-                      https://youtube.com/watch?v=...
-                    </span>{" "}
-                    or{" "}
-                    <span className="text-red-700">
-                      https://youtu.be/...
-                    </span>{" "}
-                  </FormDescription>
-                  {form.formState.errors.url && (
-                    <div className="whitespace-pre-line text-sm flex gap-2 justify-start items-start border-1 border-red-800 bg-red-50 text-red-800 rounded-md p-4">
-                      <TriangleAlert size={25} />{" "}
-                      {form.formState.errors.url.message}
-                    </div>
-                  )}
-                </FormItem>
-              )}
-            />
-            {transcript ? (
-              <>
-                <div className="flex w-full justify-center items-center text-green-600 font-semibold text-lg my-5 gap-1">
-                  Transcript Ready! <CircleCheck />
-                </div>
-                <TranscriptPreview transcript={transcript} />
-                <Button className="w-full h-12 text-md py-5 bg-green-600 hover:bg-green-700 cursor-pointer">
-                  <Captions />
-                  Get Transcript
-                </Button>
-              </>
-            ) : (
-              <Button
-                disabled={isLoading}
-                className="w-full h-12 text-md py-5 bg-red-600 hover:bg-red-700 cursor-pointer"
-              >
-                {isLoading ? (
-                  <>
-                    <LoaderCircle className="animate-spin" /> Processing...
-                  </>
-                ) : (
-                  <>
-                    <ScrollText />
-                    Transcribe
-                  </>
+    <div className="flex justify-center items-start ">
+      <Card className="w-2/5 mt-10">
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                name="url"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem {...field}>
+                    <FormLabel>YouTube Video URL</FormLabel>
+                    <FormControl>
+                      <Input placeholder="YouTube URL" />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      Eg.{" "}
+                      <span className="text-red-700">
+                        https://youtube.com/watch?v=...
+                      </span>{" "}
+                      or{" "}
+                      <span className="text-red-700">
+                        https://youtu.be/...
+                      </span>{" "}
+                    </FormDescription>
+                    {form.formState.errors.url && (
+                      <div className="whitespace-pre-line text-sm flex gap-2 justify-start items-start border-1 border-red-800 bg-red-50 text-red-800 rounded-md p-4">
+                        <TriangleAlert size={25} />{" "}
+                        {form.formState.errors.url.message}
+                      </div>
+                    )}
+                  </FormItem>
                 )}
-              </Button>
-            )}
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+              />
+              {transcript ? (
+                <>
+                  <div className="flex w-full justify-center items-center text-green-600 font-semibold text-lg my-5 gap-1">
+                    Transcript Ready! <CircleCheck />
+                  </div>
+                  <TranscriptPreview transcript={transcript} />
+                  <Button
+                    onClick={() => setShowTranscript(true)}
+                    className="w-full h-12 text-md py-5 bg-green-600 hover:bg-green-700 cursor-pointer"
+                  >
+                    <Captions />
+                    Get Transcript
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  disabled={isLoading}
+                  className="w-full h-12 text-md py-5 bg-red-600 hover:bg-red-700 cursor-pointer"
+                >
+                  {isLoading ? (
+                    <>
+                      <LoaderCircle className="animate-spin" /> Processing...
+                    </>
+                  ) : (
+                    <>
+                      <ScrollText />
+                      Transcribe
+                    </>
+                  )}
+                </Button>
+              )}
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
