@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Captions,
+  CircleCheck,
   LoaderCircle,
   ScrollText,
   TriangleAlert,
@@ -109,6 +110,9 @@ export default function TranscribeForm({
             />
             {transcript ? (
               <>
+                <div className="flex w-full justify-center items-center text-green-600 font-semibold text-lg my-5 gap-1">
+                  Transcript Ready! <CircleCheck />
+                </div>
                 <TranscriptPreview transcript={transcript} />
                 <Button className="w-full h-12 text-md py-5 bg-green-600 hover:bg-green-700 cursor-pointer">
                   <Captions />
