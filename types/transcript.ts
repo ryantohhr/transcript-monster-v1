@@ -8,3 +8,12 @@ type ProcessedTranscript = {
   textChunks: string[];
   timestampChunks: number[];
 };
+
+type TranscriptOptions = {
+  filetype: "txt";
+  showVideoId: boolean;
+  showTitle: boolean;
+  showChannelName: boolean;
+  showPublishDate: boolean;
+  showTimestamps: boolean;
+};

@@ -23,3 +23,35 @@ export function formatDate(date: string) {
     year: "numeric",
   });
 }
+
+export function formatTranscript(
+  transcript: ProcessedTranscript,
+  transcriptOptions: TranscriptOptions,
+) {
+  let fileContent = "";
+  switch (transcriptOptions.filetype) {
+    case "txt": {
+      if (transcriptOptions.showVideoId)
+        fileContent += `Video ID: ${transcript.videoId}\n`;
+      if (transcriptOptions.showTitle)
+        fileContent += `Title: ${transcript.videoTitle}\n`;
+      if (transcriptOptions.showPublishDate)
+        fileContent += `Published on: ${transcript.publishDate}\n`;
+      if (transcriptOptions.showChannelName)
+        fileContent += `Channel: ${transcript.channelName}\n`;
+      if (
+        transcriptOptions.showVideoId ||
+        transcriptOptions.showTitle ||
+        transcriptOptions.showPublishDate ||
+        transcriptOptions.showChannelName
+      )
+        fileContent += "\n";
+
+      for (let i = 0; i < transcript.timestampChunks.length; i++) {
+        fileContent += `${transcriptOptions.showTimestamps && `[${transcript.timestampChunks[i]}] `}${transcript.textChunks[i]}\n`;
+      }
+    }
+  }
+
+  return fileContent;
+}

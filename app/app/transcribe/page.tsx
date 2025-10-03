@@ -12,8 +12,8 @@ export default function Transcribe() {
 
   return (
     <div>
-      {showTranscript ? (
-        <TranscriptDownload />
+      {showTranscript && transcript ? (
+        <TranscriptDownload transcript={transcript} />
       ) : (
         <TranscribeForm
           transcript={transcript}
