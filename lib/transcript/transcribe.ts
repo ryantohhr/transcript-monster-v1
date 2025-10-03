@@ -1,7 +1,7 @@
 import { fetchTranscript } from "youtube-transcript-plus";
 import type { TranscriptResponse } from "youtube-transcript-plus/dist/types";
 import { createClient } from "../supabase/server";
-import { extractVideoId, formatDate } from "../utils";
+import { extractVideoId, formatDate, formatTimestamp } from "../utils";
 
 const CHUNK_SIZE = 3;
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
@@ -32,7 +32,7 @@ export async function fetchProcessTranscript(url: string) {
 
 function processTranscript(transcript: TranscriptResponse[]) {
   const textChunks: string[] = [];
-  const timestampChunks: number[] = [];
+  const timestampChunks: string[] = [];
 
   for (let i = 0; i < transcript.length; i += CHUNK_SIZE) {
     const currentText = [];
@@ -40,9 +40,9 @@ function processTranscript(transcript: TranscriptResponse[]) {
       if (i + j >= transcript.length) break;
       currentText.push(transcript[i + j].text);
     }
-    textChunks.push(currentText.join(" "));
+    textChunks.push(currentText.join(" ").replaceAll("&amp;#39;", "'"));
 
-    const currentTimestamp = transcript[i].offset;
+    const currentTimestamp = formatTimestamp(transcript[i].offset);
     timestampChunks.push(currentTimestamp);
   }
 

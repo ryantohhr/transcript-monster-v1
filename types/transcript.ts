@@ -6,7 +6,7 @@ type ProcessedTranscript = {
   thumbnailUrl: string;
   publishDate: string;
   textChunks: string[];
-  timestampChunks: number[];
+  timestampChunks: string[];
 };
 
 type TranscriptOptions = {
