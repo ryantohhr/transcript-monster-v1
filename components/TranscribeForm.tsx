@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import type { ProcessedTranscript } from "@/types/transcript";
 import TranscriptPreview from "./TranscriptPreview";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";

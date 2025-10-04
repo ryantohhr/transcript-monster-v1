@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from "clsx";
 import { timeStamp } from "console";
 import { TEXT_PLAIN_CONTENT_TYPE_HEADER } from "next/dist/lib/constants";
 import { twMerge } from "tailwind-merge";
+import type {
+  ProcessedTranscript,
+  TranscriptOptions,
+} from "@/types/transcript";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

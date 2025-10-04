@@ -1,5 +1,6 @@
 import { CalendarDays, User } from "lucide-react";
 import Image from "next/image";
+import type { ProcessedTranscript } from "@/types/transcript";
 
 export default function TranscriptPreview({
   transcript,

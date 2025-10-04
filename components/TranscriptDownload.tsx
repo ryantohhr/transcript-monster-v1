@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { formatTranscript } from "@/lib/utils";
+import type {
+  ProcessedTranscript,
+  TranscriptOptions,
+} from "@/types/transcript";
 import DownloadFilePreview from "./DownloadFilePreview";
 import TranscriptPreview from "./TranscriptPreview";
 import { Card } from "./ui/card";

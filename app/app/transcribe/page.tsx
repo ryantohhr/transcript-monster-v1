@@ -3,6 +3,7 @@
 import { useState } from "react";
 import TranscribeForm from "@/components/TranscribeForm";
 import TranscriptDownload from "@/components/TranscriptDownload";
+import type { ProcessedTranscript } from "@/types/transcript";
 
 export default function Transcribe() {
   const [transcript, setTranscript] = useState<ProcessedTranscript | null>(

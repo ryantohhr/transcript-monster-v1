@@ -1,4 +1,4 @@
-type ProcessedTranscript = {
+export type ProcessedTranscript = {
   videoId: string;
   videoUrl: string;
   videoTitle: string;
@@ -9,7 +9,7 @@ type ProcessedTranscript = {
   timestampChunks: string[];
 };
 
-type TranscriptOptions = {
+export type TranscriptOptions = {
   filetype: "txt";
   showVideoId: boolean;
   showTitle: boolean;

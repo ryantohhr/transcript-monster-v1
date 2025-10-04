@@ -1,5 +1,6 @@
 import { fetchTranscript } from "youtube-transcript-plus";
 import type { TranscriptResponse } from "youtube-transcript-plus/dist/types";
+import type { ProcessedTranscript } from "@/types/transcript";
 import { createClient } from "../supabase/server";
 import { extractVideoId, formatDate, formatTimestamp } from "../utils";
 
