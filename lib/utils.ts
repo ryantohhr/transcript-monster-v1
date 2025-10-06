@@ -1,6 +1,4 @@
 import { type ClassValue, clsx } from "clsx";
-import { timeStamp } from "console";
-import { TEXT_PLAIN_CONTENT_TYPE_HEADER } from "next/dist/lib/constants";
 import { twMerge } from "tailwind-merge";
 import type {
   ProcessedTranscript,
@@ -68,7 +66,7 @@ export function formatTranscript(
         fileContent += "\n";
 
       for (let i = 0; i < transcript.timestampChunks.length; i++) {
-        fileContent += `${transcriptOptions.showTimestamps && `[${transcript.timestampChunks[i]}] `}${transcript.textChunks[i]}${i === (transcript.timestampChunks.length - 1) ? "" : "\n"}`;
+        fileContent += `${transcriptOptions.showTimestamps ? `[${transcript.timestampChunks[i]}] ` : ""}${transcript.textChunks[i]}${i === (transcript.timestampChunks.length - 1) ? "" : "\n"}`;
       }
     }
   }
