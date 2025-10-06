@@ -5,6 +5,7 @@ import type {
   TranscriptOptions,
 } from "@/types/transcript";
 import DownloadFilePreview from "./DownloadFilePreview";
+import FileOptionsControl from "./FileOptionsControl";
 import TranscriptPreview from "./TranscriptPreview";
 import { Card } from "./ui/card";
 
@@ -25,9 +26,7 @@ export default function TranscriptDownload({
   const [previewOptions, setPreviewOptions] = useState<TranscriptOptions>(
     defaultTranscriptOptions,
   );
-  const [transcriptText, setTranscriptText] = useState<string>(
-    formatTranscript(transcript, defaultTranscriptOptions),
-  );
+  const transcriptText = formatTranscript(transcript, previewOptions);
 
   return (
     <div className="grid grid-cols-2 gap-10 p-10">
@@ -35,7 +34,12 @@ export default function TranscriptDownload({
         <TranscriptPreview transcript={transcript} />
         <DownloadFilePreview transcriptText={transcriptText} />
       </Card>
-      <Card></Card>
+      <div>
+        <FileOptionsControl
+          previewOptions={previewOptions}
+          setPreviewOptions={setPreviewOptions}
+        />
+      </div>
     </div>
   );
 }
