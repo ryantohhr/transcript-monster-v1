@@ -36,6 +36,7 @@ export default function TranscriptDownload({
       </Card>
       <div>
         <FileOptionsControl
+          transcript={transcript}
           previewOptions={previewOptions}
           setPreviewOptions={setPreviewOptions}
         />

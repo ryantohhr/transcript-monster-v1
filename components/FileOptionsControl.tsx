@@ -3,6 +3,7 @@ import { useState } from "react";
 import type {
   Filetype,
   FiletypeData,
+  ProcessedTranscript,
   TranscriptOptions,
 } from "@/types/transcript";
 import {
@@ -58,16 +59,43 @@ const checkboxFields: CheckboxField[] = [
   },
 ];
 
-export default function FileOptionsControl({
-  previewOptions,
-  setPreviewOptions,
-}: {
+type FileOptionsControlProps = {
+  transcript: ProcessedTranscript;
   previewOptions: TranscriptOptions;
   setPreviewOptions: React.Dispatch<React.SetStateAction<TranscriptOptions>>;
-}) {
+};
+
+export default function FileOptionsControl({
+  transcript,
+  previewOptions,
+  setPreviewOptions,
+}: FileOptionsControlProps) {
   const [currentFiletype, setCurrentFiletype] = useState<Filetype>(
     previewOptions.filetype,
   );
+
+  async function handleDownload(
+    transcript: ProcessedTranscript,
+    transcriptDownloadOptions: TranscriptOptions,
+  ) {
+    const fileName = `${transcript.videoTitle.toLowerCase().split(" ").join("_")}.${transcriptDownloadOptions.filetype}`;
+
+    const res = await fetch("http://localhost:3000/api/transcribe/download", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ transcript, transcriptDownloadOptions }),
+    });
+    const blob = await res.blob();
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   return (
     <Card className="w-[30rem] mx-auto p-5 gap-2">
@@ -139,7 +167,10 @@ export default function FileOptionsControl({
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-      <Button className="py-5 cursor-pointer text-green-700 bg-green-100 hover:bg-green-200 border-1 border-green-500">
+      <Button
+        onClick={() => handleDownload(transcript, previewOptions)}
+        className="py-5 cursor-pointer text-green-700 bg-green-100 hover:bg-green-200 border-1 border-green-500"
+      >
         <Download />
         Download Transcript
       </Button>
