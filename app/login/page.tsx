@@ -1,16 +1,23 @@
 import { CircleQuestionMark } from "lucide-react";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function LoginPage() {
   return (
     <div className="flex justify-center items-center min-h-svh">
-      <Card className="w-2/5 flex flex-col justify-center">
-        <CardHeader>
+      <Card className="w-[500px] h-[300px] flex flex-col items-center justify-center-safe">
+        <CardHeader className="w-full flex flex-col items-center">
           {" "}
-          <CardTitle className="text-center flex flex-col text-xl">
+          <CardTitle className="text-center text-3xl w-full">
             Log In with Google
           </CardTitle>
+          <CardDescription>Welcome to Transcript Monster!</CardDescription>
         </CardHeader>{" "}
         <CardContent className="flex flex-col gap-1 w-full items-center">
           <div className="flex flex-col items-center w-6/7">
