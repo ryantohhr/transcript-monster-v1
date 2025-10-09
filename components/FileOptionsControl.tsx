@@ -17,6 +17,8 @@ import { Card, CardTitle } from "./ui/card";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
 
+const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+
 const filetypes: FiletypeData[] = [
   {
     type: "txt",
@@ -80,7 +82,7 @@ export default function FileOptionsControl({
   ) {
     const fileName = `${transcript.videoTitle.toLowerCase().split(" ").join("_")}.${transcriptDownloadOptions.filetype}`;
 
-    const res = await fetch("http://localhost:3000/api/transcribe/download", {
+    const res = await fetch(`${NEXT_PUBLIC_APP_URL}/api/transcribe/download`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

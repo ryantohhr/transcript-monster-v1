@@ -23,6 +23,8 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 
+const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL;
+
 const formSchema = z.object({
   url: z
     .string("Please enter a URL!")
@@ -54,7 +56,7 @@ export default function TranscribeForm({
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3000/api/transcribe/fetch", {
+      const res = await fetch(`${NEXT_PUBLIC_APP_URL}/api/transcribe/fetch`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +65,7 @@ export default function TranscribeForm({
       });
       const data = await res.json();
 
-      await fetch("http://localhost:3000/api/transcribe/save", {
+      await fetch(`${NEXT_PUBLIC_APP_URL}/api/transcribe/save`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
