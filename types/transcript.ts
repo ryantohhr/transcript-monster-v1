@@ -11,6 +11,19 @@ export type ProcessedTranscript = {
   timestampChunks: string[];
 };
 
+export type DBTranscript = {
+  id: number;
+  created_at: string;
+  video_id: string;
+  video_url: string;
+  video_title: string;
+  channel_name: string;
+  thumbnail_url: string;
+  publish_date: string;
+  text_chunks: string[];
+  timestamp_chunks: string[];
+};
+
 export type Filetype = "txt";
 
 export type TranscriptOptions = {
