@@ -104,3 +104,48 @@ async function saveUserTranscriptRelation(videoId: string) {
 
   return res;
 }
+
+export async function fetchTranscriptHistory() {
+  const videoIds = await fetchVideoIdHistory();
+  if (!videoIds) return null;
+
+  return fetchTranscriptFromVideoId(videoIds);
+}
+
+async function fetchVideoIdHistory() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return null;
+
+  const { data, error } = await supabase
+    .from("user_transcripts")
+    .select("video_id")
+    .eq("user_id", user.id);
+
+  if (!data || error) return null;
+
+  const videoIds = data.map((data) => data.video_id) as string[];
+  return videoIds;
+}
+
+async function fetchTranscriptFromVideoId(videoIds: string[]) {
+  const supabase = await createClient();
+
+  const transcriptHistory = [];
+
+  for (const videoId of videoIds) {
+    const { data, error } = await supabase
+      .from("transcripts")
+      .select("*")
+      .eq("video_id", videoId);
+
+    if (!data || error) return null;
+
+    transcriptHistory.push(data[0]);
+  }
+
+  return transcriptHistory;
+}
