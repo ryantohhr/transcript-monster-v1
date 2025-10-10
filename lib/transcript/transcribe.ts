@@ -1,6 +1,9 @@
 import { fetchTranscript } from "youtube-transcript-plus";
 import type { TranscriptResponse } from "youtube-transcript-plus/dist/types";
-import type { ProcessedTranscript } from "@/types/transcript";
+import type {
+  ProcessedTranscript,
+  TranscriptLookupItem,
+} from "@/types/transcript";
 import { createClient } from "../supabase/server";
 import { extractVideoId, formatDate, formatTimestamp } from "../utils";
 
@@ -106,13 +109,13 @@ async function saveUserTranscriptRelation(videoId: string) {
 }
 
 export async function fetchTranscriptHistory() {
-  const videoIds = await fetchVideoIdHistory();
-  if (!videoIds) return null;
+  const userHistory = await fetchUserTranscriptHistory();
+  if (!userHistory) return null;
 
-  return fetchTranscriptFromVideoId(videoIds);
+  return fetchTranscriptFromUserHistory(userHistory);
 }
 
-async function fetchVideoIdHistory() {
+async function fetchUserTranscriptHistory() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -122,29 +125,30 @@ async function fetchVideoIdHistory() {
 
   const { data, error } = await supabase
     .from("user_transcripts")
-    .select("video_id")
+    .select("*")
     .eq("user_id", user.id);
 
   if (!data || error) return null;
 
-  const videoIds = data.map((data) => data.video_id) as string[];
-  return videoIds;
+  return data;
 }
 
-async function fetchTranscriptFromVideoId(videoIds: string[]) {
+async function fetchTranscriptFromUserHistory(
+  userHistory: TranscriptLookupItem[],
+) {
   const supabase = await createClient();
 
   const transcriptHistory = [];
 
-  for (const videoId of videoIds) {
+  for (const transcriptLookupItem of userHistory) {
     const { data, error } = await supabase
       .from("transcripts")
       .select("*")
-      .eq("video_id", videoId);
+      .eq("video_id", transcriptLookupItem.video_id);
 
     if (!data || error) return null;
 
-    transcriptHistory.push(data[0]);
+    transcriptHistory.push({ ...data[0], id: transcriptLookupItem.id }); // Replace transcript id with id from user_transcripts entry
   }
 
   return transcriptHistory;

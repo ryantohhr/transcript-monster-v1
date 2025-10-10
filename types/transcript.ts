@@ -42,3 +42,10 @@ export type FiletypeData = {
   desc: string;
   icon: LucideIcon;
 };
+
+export type TranscriptLookupItem = {
+  id: number;
+  created_at: string;
+  user_id: string;
+  video_id: string;
+};
