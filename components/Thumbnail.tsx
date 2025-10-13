@@ -12,7 +12,7 @@ export default function Thumbnail({
   url,
   width = 240,
   height = 120,
-  className = "rounded-md",
+  className,
   alt,
 }: ThumbnailProps) {
   return (
@@ -20,7 +20,7 @@ export default function Thumbnail({
       src={url}
       width={width}
       height={height}
-      className={className + "rounded-md"}
+      className={className + " rounded-md"}
       alt={alt}
     />
   );
