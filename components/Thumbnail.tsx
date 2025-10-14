@@ -17,6 +17,7 @@ export default function Thumbnail({
 }: ThumbnailProps) {
   return (
     <Image
+      loading="lazy"
       src={url}
       width={width}
       height={height}
