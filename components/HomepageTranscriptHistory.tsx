@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import type { DBTranscript } from "@/types/transcript";
 import TranscriptHistoryItem from "./TranscriptHistoryItem";
-import { Card } from "./ui/card";
+import TranscriptHistorySkeleton from "./TranscriptHistorySkeleton";
+import { Card, CardTitle } from "./ui/card";
 
 const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL;
 
@@ -11,7 +12,7 @@ export default function HomepageTranscriptHistory() {
   const [transcriptHistory, setTranscriptHistory] = useState<DBTranscript[]>(
     [],
   );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     onLoad();
@@ -36,14 +37,19 @@ export default function HomepageTranscriptHistory() {
   }
 
   return (
-    <Card className="gap-0 mx-15 flex flex-col py-0">
-      {transcriptHistory.map((transcript, index) => (
-        <TranscriptHistoryItem
-          transcript={transcript}
-          last={transcriptHistory.length === index + 1}
-          key={transcript.id}
-        />
-      ))}
+    <Card className="p-5 gap-0 pb-0 mx-15 flex flex-col">
+      <CardTitle className="mb-3 text-xl">History</CardTitle>
+      {isLoading ? (
+        <TranscriptHistorySkeleton />
+      ) : (
+        transcriptHistory.map((transcript, index) => (
+          <TranscriptHistoryItem
+            transcript={transcript}
+            last={transcriptHistory.length === index + 1}
+            key={transcript.id}
+          />
+        ))
+      )}
     </Card>
   );
 }
