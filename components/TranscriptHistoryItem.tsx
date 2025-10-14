@@ -3,13 +3,11 @@ import Thumbnail from "./Thumbnail";
 
 export default function TranscriptHistoryItem({
   transcript,
-  last,
 }: {
   transcript: DBTranscript;
-  last: boolean;
 }) {
   return (
-    <div className={`cursor-pointer ${last ? "" : "border-b-2"}`}>
+    <div className="cursor-pointer border-t-2">
       <div className="flex gap-4 p-4">
         <Thumbnail
           url={transcript.thumbnail_url}

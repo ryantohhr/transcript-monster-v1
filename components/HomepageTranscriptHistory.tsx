@@ -42,12 +42,8 @@ export default function HomepageTranscriptHistory() {
       {isLoading ? (
         <TranscriptHistorySkeleton />
       ) : (
-        transcriptHistory.map((transcript, index) => (
-          <TranscriptHistoryItem
-            transcript={transcript}
-            last={transcriptHistory.length === index + 1}
-            key={transcript.id}
-          />
+        transcriptHistory.map((transcript) => (
+          <TranscriptHistoryItem transcript={transcript} key={transcript.id} />
         ))
       )}
     </Card>
