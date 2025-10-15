@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import type { DBTranscript } from "@/types/transcript";
 import Thumbnail from "./Thumbnail";
 
@@ -6,8 +7,18 @@ export default function TranscriptHistoryItem({
 }: {
   transcript: DBTranscript;
 }) {
+  const router = useRouter();
+
+  function handleHistoryItemClick(transcript: DBTranscript) {
+    localStorage.setItem("transcript", JSON.stringify(transcript));
+    router.push("/app/transcribe");
+  }
+
   return (
-    <div className="cursor-pointer border-t-2">
+    <div
+      onClick={() => handleHistoryItemClick(transcript)}
+      className="cursor-pointer border-t-2"
+    >
       <div className="flex gap-4 p-4">
         <Thumbnail
           url={transcript.thumbnailUrl}

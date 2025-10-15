@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TranscribeForm from "@/components/TranscribeForm";
 import TranscriptDownload from "@/components/TranscriptDownload";
 import type { ProcessedTranscript } from "@/types/transcript";
@@ -10,6 +10,16 @@ export default function Transcribe() {
     null,
   );
   const [showTranscript, setShowTranscript] = useState<boolean>(false);
+
+  useEffect(() => {
+    const storedTranscript = localStorage.getItem("transcript");
+
+    if (storedTranscript) {
+      setTranscript(JSON.parse(storedTranscript));
+      setShowTranscript(true);
+      localStorage.setItem("transcript", "");
+    }
+  }, []);
 
   return (
     <div>
