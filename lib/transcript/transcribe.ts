@@ -148,7 +148,20 @@ async function fetchTranscriptFromUserHistory(
 
     if (!data || error) return null;
 
-    transcriptHistory.push({ ...data[0], id: transcriptLookupItem.id }); // Replace transcript id with id from user_transcripts entry
+    const newTranscript = {
+      id: transcriptLookupItem.id, // Replace transcript id with id from user_transcripts entry to ensure uniqueness
+      createdAt: data[0].created_at,
+      videoId: data[0].video_id,
+      videoUrl: data[0].video_url,
+      videoTitle: data[0].video_title,
+      channelName: data[0].channel_name,
+      thumbnailUrl: data[0].thumbnail_url,
+      publishDate: data[0].publish_date,
+      textChunks: data[0].text_chunks,
+      timestampChunks: data[0].timestamp_chunks,
+    };
+
+    transcriptHistory.push(newTranscript);
   }
 
   return transcriptHistory;
