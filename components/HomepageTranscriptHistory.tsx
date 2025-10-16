@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { DBTranscript } from "@/types/transcript";
 import TranscriptHistoryItem from "./TranscriptHistoryItem";
 import TranscriptHistorySkeleton from "./TranscriptHistorySkeleton";
+import { Button } from "./ui/button";
 import { Card, CardTitle } from "./ui/card";
 
 const NEXT_PUBLIC_APP_URL = process.env.NEXT_PUBLIC_APP_URL;
@@ -13,6 +14,7 @@ export default function HomepageTranscriptHistory() {
     [],
   );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [historyFetched, setHistoryFetched] = useState<boolean>(false);
 
   useEffect(() => {
     onLoad();
@@ -33,6 +35,7 @@ export default function HomepageTranscriptHistory() {
       setTranscriptHistory(data.transcriptHistory);
     } finally {
       setIsLoading(false);
+      setHistoryFetched(true);
     }
   }
 
@@ -45,6 +48,18 @@ export default function HomepageTranscriptHistory() {
         transcriptHistory.map((transcript) => (
           <TranscriptHistoryItem transcript={transcript} key={transcript.id} />
         ))
+      )}
+      {transcriptHistory.length === 0 && historyFetched && (
+        <div className="flex justify-center items-center py-5">
+          <Card>
+            <CardTitle className="flex flex-col items-center justify-center gap-5 px-8 text-center">
+              No transcripts yet, get the transcript of a YouTube video now!
+              <Button asChild className="mx-5 bg-red-500 hover:bg-red-700">
+                <a href="/app/transcribe">Get Transcripts</a>
+              </Button>
+            </CardTitle>
+          </Card>
+        </div>
       )}
     </Card>
   );
