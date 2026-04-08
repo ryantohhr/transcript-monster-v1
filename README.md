@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Transcript Monster v1
 
-## Getting Started
+A full-stack web application that extracts YouTube video transcripts and allows users to download them.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Frontend:** Next.js, React, Tailwind CSS  
+- **Backend / Database:** Supabase  
+- **Authentication:** Google OAuth with Supabase Auth (OAuth 2.0)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Takeaways
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project helped me learn and apply core full-stack development concepts, including:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Building custom UI components with shadcn
+- Making and handling API requests
+- Designing systems that handle relational data
+- Applying type safety and type checking
+- Implementing authentication using Google OAuth (OAuth 2.0)
 
-## Learn More
+## App Overview
 
-To learn more about Next.js, take a look at the following resources:
+### User Flow:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+User signs in with Google
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<img src="./images/login_screen.png" width="500"/>
 
-## Deploy on Vercel
+Homepage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<img src="./images/home_screen_empty.png" width="500"/>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+User pastes YouTube link to fetch transcript
+
+<img src="./images/transcript_processing.png" width="500"/>
+
+Transcript fetched!
+
+<img src="./images/transcript_ready.png" width="500"/>
+
+Preview and customise transcript options for downloading
+
+<img src="./images/transcript_preview.png" width="500"/>
+
+Homepage now shows history of video transcripts fetched!
+
+(Click each history item to open the transcript preview page)
+
+<img src="./images/home_screen_with_history.png" width="500"/>
+
+
+## Potential Improvements
+
+1. Add more filetypes options for download
+2. Integrated chat function with video player and LLM
